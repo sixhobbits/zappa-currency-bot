@@ -2,7 +2,7 @@ import config
 import requests
 
 from datetime import datetime
-from urllib.parse import quote
+from urllib import quote
 
 # The main URL for the Telegram API with our bot's token
 BASE_URL = "https://api.telegram.org/bot{}".format(config.bot_token)
@@ -27,12 +27,13 @@ def parse_conversion_query(query):
 
 def get_rate(frm, to):
     """Get the raw conversion rate between two currencies"""
-    url = "http://api.fixer.io/latest?base={}&symbols={}".format(frm, to)
+    url = "http://free.currencyconverterapi.com/api/v4/convert?q={}_{}&compact=ultra".format(frm, to)
     try:
         response = requests.get(url)
         js = response.json()
-        rates = js['rates']
-        return rates.popitem()[1]
+        key = frm + "_" + to
+        rates = js[key]
+        return rates
     except Exception as e:
         print(e)
         return 0
